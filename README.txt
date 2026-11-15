@@ -1,9 +1,2 @@
-SWIPE REPAS BETA 5.8.4 - SUBSTITUTIONS
-- Correction du bouton Lire la recette.
-- Sur chaque ingredient manquant : Je l'ai, puis quantite et unite.
-- Pour feculents et legumes : Remplacer, choix d'un aliment reellement disponible, quantite, puis nouvelle recherche.
-- La nouvelle recherche conserve la proteine de la recette et privilegie une vraie recette utilisant le substitut.
-- La proteine n'est pas substituee automatiquement.
-- Seuils conserves : suffisant >=100%; insuffisant signale en dessous. Le moteur de remplacement cible les ingredients insuffisants/manquants.
-LANCEMENT : py -m http.server 8024
-OUVRIR : http://localhost:8024/
+SWIPE REPAS BETA 5.13.4 - CANDIDATE GITHUB + INCONTOURNABLES
+Catalogue 5K enrichi d'un socle de recettes incontournables couvrant plats familiaux, entrées, desserts, boissons détox et énergisantes. Les nouvelles fiches sont des recettes de test originales/synthétiques avec étapes et chronos, destinées à valider les parcours familiaux et la recherche. Titres contrôlés notamment : tarte aux pommes, mousse au chocolat, bolognaise, hachis parmentier, tiramisu, crêpes, poulet curry, saumon au four et soupe à l'oignon.
