@@ -1,2 +1,2 @@
-SWIPE REPAS BETA 5.13.4 - CANDIDATE GITHUB + INCONTOURNABLES
-Catalogue 5K enrichi d'un socle de recettes incontournables couvrant plats familiaux, entrées, desserts, boissons détox et énergisantes. Les nouvelles fiches sont des recettes de test originales/synthétiques avec étapes et chronos, destinées à valider les parcours familiaux et la recherche. Titres contrôlés notamment : tarte aux pommes, mousse au chocolat, bolognaise, hachis parmentier, tiramisu, crêpes, poulet curry, saumon au four et soupe à l'oignon.
+SWIPE REPAS BETA 5.15.0 - RECONSTRUCTION INTEGREE
+Aucun patch externe. Préférence du midi intégrée au parcours semaine, planning sans doublons, cartes recette/Short/cuisine, pause semaine suivante, courses modifiables et partageables.
