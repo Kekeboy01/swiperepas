@@ -1,2 +1,5 @@
-SWIPE REPAS BETA 5.15.0 - RECONSTRUCTION INTEGREE
-Aucun patch externe. Préférence du midi intégrée au parcours semaine, planning sans doublons, cartes recette/Short/cuisine, pause semaine suivante, courses modifiables et partageables.
+SWIPE REPAS BETA 5.16.0 - TEST PC ISOLÉ
+Version complète locale destinée aux tests avant GitHub.
+Test prioritaire : Semaine > Midi > Type précis > wrap. Les propositions du midi doivent rester Wrap. Les boutons X/Cœur et le glissement horizontal doivent changer la carte. Le planning interdit les doublons exacts. La liste de courses est modifiable et partageable.
+LANCEMENT WINDOWS : ouvrir PowerShell dans ce dossier puis exécuter : py -m http.server 8050
+Ouvrir ensuite : http://localhost:8050/?v=5160
