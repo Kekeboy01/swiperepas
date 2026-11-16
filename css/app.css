@@ -5,3 +5,6 @@
 /* 5.19 candidate GitHub: Shorts video postponed; stable features kept. */
 
 .swipe-backbar{display:flex;justify-content:flex-start;margin:4px 0 10px}.swipe-backbar .btn{min-width:110px}
+
+/* 5.20.0 - verification Je cuisine maintenant */
+.validation-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 12px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:14px;margin:9px 0}.validation-row small{grid-column:1/-1;color:var(--muted)}.validation-row.ok{background:#ecfdf5;border-color:#a7f3d0}.validation-row.miss{background:#fff7ed;border-color:#fed7aa}
