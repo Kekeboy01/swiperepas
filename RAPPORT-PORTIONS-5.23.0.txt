@@ -1,0 +1,6 @@
+SWIPE REPAS 5.23.0 - CORRECTION PORTIONS
+Catalogue: 5119 recettes
+poisson frais: 248 recette(s) relevée(s) au minimum
+pommes de terre: 824 recette(s) relevée(s) au minimum
+pâtes/nouilles: 814 recette(s) relevée(s) au minimum
+riz/céréales: 2362 recette(s) relevée(s) au minimum
