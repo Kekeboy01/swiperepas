@@ -1,0 +1,7 @@
+Boucherie & poissonnerie: 3236
+Fruits & legumes: 7465
+Epices & aromates: 9446
+Epicerie & condiments: 5280
+Feculents & legumineuses: 3872
+Epicerie: 2892
+Cremerie & oeufs: 389
