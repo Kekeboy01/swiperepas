@@ -29,3 +29,5 @@
 .hist-row span{font-size:22px}.chips.small .chip{font-size:13px;padding:4px 9px}
 
 .astuce{background:#fff6e0;border-radius:10px;padding:7px 10px;margin:6px 0 2px;font-size:.92em}
+
+/* 5.40.0 fêtes */.astuce{display:flex;gap:8px;align-items:flex-start}.astuce-prof{width:34px;flex:0 0 auto;margin-top:-2px}.fete{background:linear-gradient(180deg,#fff8ec,#fff)}.fete h3{margin:14px 0 6px;font-size:1rem}.fete-row{display:grid;grid-template-columns:34px 1fr;column-gap:8px;width:100%;text-align:left;background:#fff;border:1px solid var(--border);border-radius:12px;padding:8px 10px;margin:5px 0;color:var(--ink)}.fete-row span{grid-row:span 2;font-size:24px;align-self:center}.fete-row small{color:var(--muted)}
