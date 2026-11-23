@@ -39,3 +39,4 @@
 .n-dots{display:flex;gap:6px;margin:-4px 0 10px}.n-dots span{flex:1;height:6px;border-radius:4px;background:var(--border)}.n-dots span.on{background:var(--green)}.n-big .chip{font-size:1.02em;padding:10px 14px}.n-group{margin:12px 0 4px;font-size:.95em;color:var(--muted)}.n-more summary{cursor:pointer;font-weight:700;margin:12px 0;color:var(--green)}
 .ing-row p{display:flex;gap:8px;align-items:center;margin:6px 0}.ing-row p span{flex:1}.ing-more{border:0;background:#f1ecff;border-radius:10px;padding:4px 8px;cursor:pointer}.ing-panel{background:#fbf8ff;border-radius:12px;padding:8px 10px;margin:4px 0 10px}
 .swipe-ings{margin-top:8px}.swipe-ings .chips{margin-top:4px}
+.prep-plat{border-top:1px solid var(--border);padding:8px 0}.prep-plat details summary{cursor:pointer;color:var(--green);font-size:.9em}.prep-ordre li,.prep-etiq li{margin:6px 0}.prep-etiq{padding-left:18px}
