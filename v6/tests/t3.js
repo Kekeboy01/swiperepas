@@ -1,0 +1,27 @@
+const {R,T,click,H,ok,ERR,store}=require('./h.js');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{await wait(1500);
+ ok(R('state.view')==='home'&&R('state.profile.soirs')===4&&R('state.profile.prepMeal')===true,'rechargement : profil conservé, pas de nouvelle présentation');
+ await click({'data-go6':'preparer'});
+ ok(R('state.view')==='prep6','Prep meal OUI → parcours prep lancé directement (aucune question)');
+ let h=T(H());ok(/Première base/.test(h)&&/peut devenir/.test(h),'swipe de base : grande base + 3 idées');console.log('   base 1 :',R('basesDispo6()[0].titre'),'→',R('basesDispo6()[0].plats.map(i=>state.recipes[i][1]).join(" / ")'));
+ const b0=R('basesDispo6()[0].id');await click({'data-p6':'no'});ok(R('basesDispo6().filter(x=>!state.p6.refus.includes(x.id))[0].id')!==b0,'✕ : base suivante');
+ await click({'data-p6':'yes'});ok(/Pour combien de repas/.test(T(H())),'♥ → « Pour combien de repas veux-tu utiliser cette base ? »');
+ ok(/2 repas/.test(T(H()))&&/3 repas/.test(T(H())),'choix 2 ou 3 (rien d’imposé)');
+ await click({'data-p6n':'3'});h=T(H());ok(/Deuxième base/.test(h)&&/Pas de deuxième base/.test(h),'deuxième base proposée (avec sortie possible)');
+ await click({'data-p6':'yes'});await click({'data-p6n':'2'});
+ ok(R('state.view')==='swipe','après 2 bases → swipe des plats (pas de boucle)');
+ const ph=R('state.phases.map(p=>p.type+":"+p.slot+":"+p.count).join(" | ")');console.log('   phases :',ph);
+ ok(R('state.phases[0].type')==='prepdish'&&R("state.phases.filter(p=>p.type==='prepdish').reduce((t,p)=>t+p.count,0)")===5,'1res phases = plats des bases (3+2 = 5 repas : soirs puis midis)');
+ const pool=R('state.deck.map(r=>r[1]).slice(0,8).join(" / ")');console.log('   plats proposés :',pool);
+ let n=0;while(R('state.view')==='swipe'&&n++<400){await click({'data-swipe':n%5===0?'no':'yes'})}
+ ok(R('state.view')==='planning','fin du swipe → planning ('+n+' gestes, pas de boucle infinie)');
+ const pl=R('JSON.stringify(state.planner)');console.log('   planning :',Object.keys(JSON.parse(pl)).length,'repas');
+ const eve=Object.keys(JSON.parse(pl)).filter(k=>k.endsWith('-1')).length,mid=Object.keys(JSON.parse(pl)).filter(k=>k.endsWith('-0')).length;
+ ok(eve===4&&mid===5,`soirs ${eve}/4 et midis ${mid}/5 remplis`);
+ const fromBase=R(`(()=>{const ids=state.p6base.ids;const all=new Set();for(const id of ids){const f=id.startsWith('q:')?quickGroups().get(id):prepFamilles().find(x=>x.id===id);f&&f.plats.forEach(i=>all.add(i))}return Object.entries(state.planner).filter(([k,v])=>k.endsWith('-1')&&all.has(v)).length})()`);
+ console.log('   soirs issus des bases :',fromBase);
+ h=T(H());ok(/Lun/.test(h)&&/Dim/.test(h)&&/Midi|Soir/.test(h),'planning : jours en onglets + lignes Midi/Soir');
+ ok(!/Lundi.*Mardi.*Mercredi.*Jeudi.*Vendredi.*Samedi.*Dimanche/.test(T(H().split('Vue complète')[0])),'pas les 7 jours empilés à l’écran principal');
+ console.log('ERR',ERR.slice(0,3));
+})();

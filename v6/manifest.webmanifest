@@ -1,0 +1,12 @@
+{
+  "name": "SwipeRepas (test 6.0)",
+  "short_name": "Swipe Repas",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FFF8F1",
+  "theme_color": "#D8613F",
+  "icons": [
+    {"src":"./assets/icons/icon-192.png","sizes":"192x192","type":"image/png"},
+    {"src":"./assets/icons/icon-512.png","sizes":"512x512","type":"image/png"}
+  ]
+}
