@@ -1,0 +1,17 @@
+const {R,T,click,H,ok,ERR,store}=require('./h.js');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{await wait(1500);
+ R('localStorage.setItem(K+"onboarded","true");state.profile.prepMeal=false;state.profile.mealprep="non";state.profile._mp="non";state.profile.midis=0;state.profile.soirs=3;state.profile.desserts=1;save();state.view="home";render()');
+ await click({'data-go6':'preparer'});ok(R('state.view')==='weekSetup','Prep meal NON → aucune question de prep, récapitulatif de la semaine');
+ console.log('   ',T(H()).slice(0,260));
+ ok(R('state.week.eveMeals')===3&&R('state.week.desserts')===1,'semaine pré-remplie depuis le profil (3 soirs, 1 dessert)');
+ const b=(H().match(/data-startweek[^>]*>/)||[])[0];ok(!!b,'bouton pour lancer le swipe');
+ await click({'data-startweek':''});ok(R('state.view')==='swipe','swipe des plats');
+ let h=T(H());ok(/Voir la recette/.test(h)&&/(Facile|Moyen|Élaboré)/.test(h),'carte swipe : nom, accompagnement, temps, difficulté, mode + Voir la recette');console.log('   ',h.slice(0,220));
+ ok(!/Ingrédients/.test(h.split('Voir la recette')[0]),'pas de fiche technique sur la carte');
+ let n=0;while(R('state.view')==='swipe'&&n++<300)await click({'data-swipe':'yes'});
+ ok(R('state.view')==='planning','planning après swipe ('+n+' gestes)');
+ const ks=Object.keys(R('state.planner'));ok(ks.filter(k=>k.endsWith('-1')).length===3&&ks.some(k=>k.endsWith('-2')),'3 soirs + 1 dessert placés');
+ ok(!/Voir ma session prep/.test(T(H())),'pas de rappel prep quand Prep meal = NON');
+ console.log('ERR',ERR.slice(0,3));
+})();

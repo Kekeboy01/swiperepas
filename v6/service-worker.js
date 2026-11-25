@@ -1,7 +1,3 @@
-/* SwipeRepas 6.0.0 — version de test (/v6/). Ce service worker ne touche qu'à ses propres caches. */
-const PREFIX='swipe-repas-v6-',CACHE=PREFIX+'6000';
-const D=['master/daily-master','poses/daily-saluer','poses/daily-reflechir','poses/daily-pointer','poses/daily-cuisiner','poses/daily-applaudir','conseils/daily-conseils','anti-gaspi/daily-anti-gaspi'].map(x=>'./assets/daily/'+x+'.png');
-const CORE=['./','./index.html','./manifest.webmanifest','./css/app.css?v=6000','./css/ui6.css?v=6000','./js/app.js?v=6000','./js/ui6.js?v=6000','../data/recettes.json?v=6000','../data/ingredients.json?v=6000','../data/cuisine.json?v=6000','./assets/icons/icon-192.png','./assets/icons/icon-512.png','./assets/icons/icon-180.png','./assets/icons/icon-32.png',...D];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>Promise.all(CORE.map(u=>c.add(u).catch(()=>null)))).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith(PREFIX)&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==location.origin)return;e.respondWith(fetch(e.request).then(res=>{if(res&&res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy))}return res}).catch(()=>caches.match(e.request).then(hit=>hit||caches.match('./index.html'))))});
+/* La version de test /v6/ est terminée : ce service worker se retire et efface ses caches. */
+self.addEventListener('install',()=>self.skipWaiting());
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x.startsWith('swipe-repas-v6-')).map(x=>caches.delete(x)))).then(()=>self.registration.unregister())));
