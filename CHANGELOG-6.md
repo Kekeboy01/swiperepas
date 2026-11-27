@@ -63,3 +63,24 @@ Date : 24/11/2026. Version précédente : 5.60.0, qui reste en ligne à la racin
 - Validée par la personne et publiée à la racine. La 5.60.0 est sauvegardée dans la branche `sauvegarde-5.60.0`.
 - **Courses, rayon Surgelés** : les surgelés se vendent en paquets, pas à la pièce. Tout est donc converti en **grammes**, arrondis à 10 g au-dessus, avec le poids moyen du produit pris dans le dictionnaire (poids d'une pièce, ou poids du paquet ou de la barquette). Exemple : « carottes (surgelés) 200 g » au lieu de « 2 carottes ».
 - L'adresse /v6/ renvoie vers la version officielle et retire son service worker.
+
+## 6.1.0 (26/11/2026) — nouvelle Daily + fiche « Santé & tolérances »
+- **Daily** : nouvelles images (sans nom commercial ni slogan) dans `assets/daily/master`, `poses`, `conseils`.
+- **Santé & tolérances** (Profil → Santé & tolérances) : couche `js/health.js` + `css/health.css`, posée par-dessus app.js et ui6.js, sans fonction supprimée.
+  - Recherche de situation (17 noms), toutes **MANUAL_ONLY** : aucun aliment n'est ajouté automatiquement, aucun profil médical inventé.
+  - Aliments = identifiants existants de `data/ingredients.json`. Statuts UNKNOWN / TOLERATED / LIMIT / AVOID / STRICT_EXCLUSION, 6 origines, fréquences (jamais, max 1/2/3 par semaine, occasionnellement, espacer, personnaliser).
+  - Tri par swipe (droite = je tolère, gauche = je préfère éviter, haut = exclure, boutons visibles, toucher = détail).
+  - Moteur : exclusion stricte partout (via `allergyHit`), fréquences et « à éviter » dans le swipe des repas (`phasePool`, `swipe`), avertissement sur la carte.
+  - Apprentissage : après 3 plats acceptés malgré « à éviter / à limiter », Daily pose la question (oui / non / plus tard) — jamais de modification seule.
+  - Données dans le profil sur l'appareil (localStorage) ; bouton « Supprimer toutes mes informations santé ».
+- Correctif : minuteurs de cuisine `60010` → `60000` ms par minute (reste d'un ancien remplacement de version).
+- Tests : `tests6/t8_sante_noyau.js` (49), `t9_sante_app.js` (37) puis `t10_sante_rechargement.js` (10) avec le même STORE, `t11_sante_chrome.py` (7, vrai Chrome). Anciens tests : 80/80.
+
+## 6.2.0 (26/11/2026) — recommandations générales par maladie (sources officielles)
+- Nouveau fichier `js/health-templates.js` : 15 profils sourcés (reflux, diabète 1, diabète 2, prédiabète, Crohn, RCH, autre MICI, intestin irritable, maladie cœliaque, intolérance au lactose, hypertension, cholestérol, goutte, ulcère, dyspepsie). Chaque aliment = un identifiant de `data/ingredients.json` + la phrase de la source qui le justifie. Sources : ameli.fr, Santé.fr, SNFGE, SFHGL, AFDIAG, Afa Crohn RCH, Fédération Française des Diabétiques.
+- 5 situations sans liste d'aliments, avec une information honnête : endométriose (HAS : pas de régime recommandé), allergie alimentaire (renvoi vers Mes allergies), intolérance au fructose, autre intolérance, maladie rénale chronique (consignes individuelles).
+- Les recommandations restent consultables à tout moment (« Voir les recommandations ») avec les liens des sources.
+- Les aliments proposés arrivent en « À vérifier pour moi » ; la recommandation est affichée (« à limiter », « à exclure »…) et ne s'applique que si l'utilisateur appuie sur « Suivre la recommandation ».
+- « Mettre en pause » une situation (ex. Crohn hors poussée) suspend les aliments venus de son profil, sauf ceux dont l'utilisateur a fait sa propre règle.
+- Retirer une situation enlève seulement les aliments proposés jamais triés ; les choix de l'utilisateur restent.
+- Tests : t8 (66), t9 (38) + t10 (10), t12 (19), t11 Chrome (8). Anciens tests 80/80.

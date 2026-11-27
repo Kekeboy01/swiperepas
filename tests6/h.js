@@ -12,7 +12,7 @@ const ctx={setTimeout,clearTimeout,setInterval,clearInterval,URL,URLSearchParams
  fetch:(u)=>Promise.resolve({json:()=>Promise.resolve(JSON.parse(fs.readFileSync(path.join(base,u.split('?')[0]),'utf8')))})};
 ctx.globalThis=ctx;ctx.window=ctx;vm.createContext(ctx);
 const run=(f)=>{try{vm.runInContext(fs.readFileSync(path.join(base,f),'utf8'),ctx,{filename:f})}catch(e){ERR.push(f+': '+e.stack)}};
-run('js/app.js');run('js/ui6.js');
+run('js/app.js');run('js/ui6.js');if(fs.existsSync(path.join(base,'js/health-templates.js')))run('js/health-templates.js');if(fs.existsSync(path.join(base,'js/health.js')))run('js/health.js');
 const R=e=>vm.runInContext(e,ctx),T=h=>h.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
 async function click(attrs,tag='BUTTON'){const ds={};for(const k in attrs)if(k.startsWith('data-'))ds[k.slice(5).replace(/-([a-z])/g,(m,x)=>x.toUpperCase())]=attrs[k];let stopped=false;const b={dataset:ds,tagName:tag,hasAttribute:a=>a in attrs,getAttribute:a=>attrs[a]};const ev={target:{closest:()=>b},stopPropagation(){stopped=true},preventDefault(){}};
  for(const l of L.filter(x=>x.cap)){await l.f(ev);if(stopped)return}for(const l of L.filter(x=>!x.cap)){await l.f(ev);if(stopped)return}}

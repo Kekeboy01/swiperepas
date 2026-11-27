@@ -1,0 +1,32 @@
+/* SwipeRepas 6.1.0 — fiche Santé & tolérances (palette Terracotta de ui6.css) */
+.health6{padding:6px 2px 20px}
+.health6 .h2h{font-size:1.1rem;margin:22px 0 8px}.health6 .h3h{font-size:.95rem;margin:16px 0 6px;color:#7a6d63}
+.hnote{background:#fff;border-left:4px solid var(--mou);border-radius:12px;padding:10px 12px;font-size:.88rem;line-height:1.45;margin:10px 0}
+.hsearch{width:100%;padding:13px 14px;border:1.5px solid var(--li);border-radius:14px;background:#fff;font-size:1rem;margin:4px 0 8px}
+.hcond{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--li)}
+.hcond small{display:block;color:#7a6d63}.hcond.off{opacity:.55}
+.hrow{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;text-align:left;background:#fff;border:1.5px solid var(--li);border-radius:14px;padding:12px 14px;margin:6px 0;color:var(--tx);min-height:52px}
+.hrow small{grid-column:1/-1;color:#7a6d63}.hname{font-weight:700}
+.hpill{font-size:.75rem;font-weight:800;border-radius:999px;padding:3px 9px;background:var(--li);white-space:nowrap}
+.hpill.s-TOLERATED{background:#e3f1df;color:#3d6b34}.hpill.s-LIMIT{background:#fbefd2;color:#8a6412}.hpill.s-AVOID{background:#fde3d8;color:var(--td)}.hpill.s-STRICT_EXCLUSION{background:var(--tom);color:#fff}
+.hdemo{font-style:normal;font-size:.7rem;font-weight:800;background:var(--gl);border-radius:999px;padding:2px 8px;vertical-align:middle}
+.hdanger{color:var(--tom)!important;margin-top:18px}
+.hask{background:var(--gl);border-radius:16px;padding:12px;margin:12px 0}.hask p{margin:0 0 8px}
+.hcustom{display:flex;align-items:center;gap:8px;margin-top:8px}.hcustom input{width:70px;padding:10px;border:1.5px solid var(--li);border-radius:10px}
+.hwarn{background:#fde3d8;color:var(--td);border-radius:10px;padding:6px 10px;font-size:.85rem;margin:0 0 8px}
+.hentry{margin:14px 0}
+.hswipe{max-width:460px;margin:0 auto}
+.hcard{position:relative;display:grid;place-items:center;align-content:center;gap:6px;min-height:300px;background:#fff;border:1.5px solid var(--li);border-radius:26px;box-shadow:0 12px 30px #29231f14;text-align:center;touch-action:none;user-select:none;-webkit-user-select:none;transition:transform .15s ease;margin:10px 0 18px;padding:20px}
+.hcard h2{font-size:2rem;margin:0;text-transform:capitalize}
+.hcard[data-dir=right]{box-shadow:0 12px 34px #68705a55}.hcard[data-dir=left]{box-shadow:0 12px 34px #d8613f55}.hcard[data-dir=up]{box-shadow:0 12px 34px #c94c3b77}
+.hcard-up{position:absolute;top:12px;font-size:.75rem;color:#b3a69b}
+.hbtns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.hb{border-radius:16px;padding:14px 6px;font-weight:800;border:1.5px solid var(--li);background:#fff;color:var(--tx);min-height:56px}
+.hb.ok{border-color:var(--oli);color:#3d6b34}.hb.nope{border-color:var(--t);color:var(--td)}.hb.excl{background:var(--tom);border-color:var(--tom);color:#fff}
+.health6 .seg6,.sheet .seg6{flex-wrap:nowrap;flex:none}.health6 .seg6 button,.sheet .seg6 button{white-space:nowrap}
+.hpanel{background:var(--cr);border:1.5px solid var(--li);border-radius:14px;padding:10px 12px;margin:8px 0;font-size:.9rem;line-height:1.45}.hpanel p{margin:4px 0}
+.hlist{margin:6px 0 10px;padding-left:18px}.hlist li{margin:4px 0}.hlist small{color:#7a6d63}
+.hsrc{margin-top:6px;font-size:.8rem}.hsrc a{display:block;color:var(--td);margin-top:3px;word-break:break-word}
+.hsug{display:block;color:var(--td);font-weight:700;margin-top:2px}
+.hcond{display:block}.hcondtop{display:flex;justify-content:space-between;gap:8px}.hcond .actions{margin:8px 0 4px}
+.hsugbtn{margin-top:10px}

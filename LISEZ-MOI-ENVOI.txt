@@ -1,0 +1,15 @@
+SWIPEREPAS 6.2.0 — FICHIERS À ENVOYER SUR GITHUB (26/11/2026)
+Nouvelle Daily + fiche « Santé & tolérances » + recommandations par maladie (sources officielles).
+Ce dossier remplace A_ENVOYER_GITHUB_6.1.0 (inutile de l envoyer).
+
+Ce dossier contient UNIQUEMENT les fichiers nouveaux ou modifiés par rapport à la version en ligne (6.0.1).
+Les sous-dossiers (js, css, assets, tests6) doivent garder leur nom.
+
+1. Ouvre https://github.com/Kekeboy01/swiperepas (connecté à ton compte).
+2. Clique sur « Add file » puis « Upload files ».
+3. Dans l'Explorateur Windows, ouvre ce dossier, sélectionne TOUT son contenu
+   (index.html, service-worker.js, CHANGELOG-6.md et les dossiers js, css, assets, tests6) et glisse-le dans la page GitHub.
+4. En bas, écris : « MAJ 6.2.0 - nouvelle Daily + fiche Santé et recommandations par maladie » puis « Commit changes ».
+5. Attends 1 à 2 minutes, ouvre l'app et recharge la page (2 fois si l'ancienne Daily s'affiche encore).
+
+Retour en arrière : la 6.0.1 reste dans l'historique GitHub (commit 6246fc6).
