@@ -30,3 +30,13 @@
 .hsug{display:block;color:var(--td);font-weight:700;margin-top:2px}
 .hcond{display:block}.hcondtop{display:flex;justify-content:space-between;gap:8px}.hcond .actions{margin:8px 0 4px}
 .hsugbtn{margin-top:10px}
+.hpill.s-FAVOR{background:#dcefd6;color:#2f6a2a}
+.hfav{background:#e6f2df;color:#2f6a2a;border-radius:10px;padding:6px 10px;font-size:.85rem;margin:0 0 8px}
+.hev{display:inline-block;background:#fbefd2;color:#8a6412;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:800;margin:0 0 4px}
+.hbtns{grid-template-columns:1fr 1fr}
+.hb.fav{border-color:#5f8f4e;color:#2f6a2a;background:#f1f8ec}
+.hcard-down{position:absolute;bottom:12px;font-size:.75rem;color:#b3a69b}
+.hcook{border-top:1px solid var(--li);margin-top:10px;padding-top:6px}
+.hcookn{background:#e6f2df;border-radius:12px;padding:8px 10px}
+.hcook{border-top:1px solid var(--li);margin-top:10px;padding-top:6px}
+.hcookn{background:#e6f2df;border-radius:12px;padding:8px 10px}

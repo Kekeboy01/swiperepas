@@ -5,11 +5,11 @@ const REC=JSON.parse(fs.readFileSync(path.join(base,'data/recettes.json'),'utf8'
 let n=0,f=0;const ok=(c,m)=>{n++;if(!c)f++;console.log((c?'✅ ':'❌ ')+m)};
 // 1. Aucune recommandation médicale inventée
 const D=require('../js/health-templates.js');
-ok(Object.keys(C.TEMPLATES).length===15&&C.CONDITIONS.filter(c=>c.templateStatus==='VERIFIED_TEMPLATE').every(c=>C.TEMPLATES[c.templateId]),'15 profils sourcés reliés à leur situation');
+ok(Object.keys(C.TEMPLATES).length===16&&C.CONDITIONS.filter(c=>c.templateStatus==='VERIFIED_TEMPLATE').every(c=>C.TEMPLATES[c.templateId]),'16 profils sourcés reliés à leur situation');
 ok(Object.values(D.templates).every(t=>t.sources.length&&t.sources.every(k=>D.sources[k]&&/^https:\/\//.test(D.sources[k].url))),'chaque profil cite au moins une source officielle (lien https)');
 ok(Object.values(D.templates).every(t=>t.foods.every(f=>f[0] in ING&&f[2]&&f[2].length>10)),'chaque aliment proposé existe dans la base et a sa justification');
-ok(Object.values(D.templates).every(t=>t.foods.every(f=>['LIMIT','AVOID','STRICT_EXCLUSION','UNKNOWN'].includes(f[1]))),'suggestions = statuts valides');
-ok(['endometriose','allergie_alim','intol_fructose','intol_autre','irc'].every(id=>{const c=C.CONDITIONS.find(x=>x.id===id);return c&&c.templateStatus==='MANUAL_ONLY'&&c.info}),'situations sans liste d’aliments : MANUAL_ONLY + information (ex. endométriose : pas de régime recommandé par la HAS)');
+ok(Object.values(D.templates).every(t=>t.foods.every(f=>['FAVOR','LIMIT','AVOID','STRICT_EXCLUSION','UNKNOWN'].includes(f[1]))),'suggestions = statuts valides');
+ok(['allergie_alim','intol_fructose','intol_autre','irc'].every(id=>{const c=C.CONDITIONS.find(x=>x.id===id);return c&&c.templateStatus==='MANUAL_ONLY'&&c.info}),'situations sans liste d’aliments : MANUAL_ONLY + information');
 ok(C.TEMPLATES.coeliaque.items.filter(i=>i.suggested==='STRICT_EXCLUSION').every(i=>(ING[i.id].al||[]).includes('gluten')),'cœliaque : exclusions strictes = aliments marqués gluten dans la base');
 ok(C.searchConditions('cro').some(c=>c.id==='crohn')&&C.searchConditions('mici').length>=3&&C.searchConditions('r').length===0,'recherche de situation (après 2 lettres)');
 ok(C.searchConditions('diab').length===3&&C.searchConditions('reflux')[0].id==='reflux','recherche : diabète, reflux');
@@ -36,7 +36,7 @@ const ail=C.ruleOf(h,'ail');ok(ail.status==='UNKNOWN'&&ail.origin==='GENERAL_TEM
 C.setStatus(ail,'AVOID');C.setOrigin(ail,'MEDICAL_INSTRUCTION');ok(ail.modifiedByUser&&ail.confirmedByUser,'modification marquée « par l\'utilisateur »');
 ok(C.resetToTemplate(ail)&&ail.status==='UNKNOWN'&&ail.origin==='GENERAL_TEMPLATE'&&!ail.modifiedByUser,'« Rétablir la proposition initiale »');
 // 4. Statuts, origines, fréquences : tout modifiable
-for(const s of C.STATUSES)C.setStatus(r,s);ok(r.status==='STRICT_EXCLUSION','les 5 statuts sont réglables');
+for(const s of C.STATUSES)C.setStatus(r,s);ok(r.status==='STRICT_EXCLUSION'&&C.STATUSES.length===6,'les 6 statuts sont réglables (dont « J’en veux plus souvent »)');
 for(const o of C.ORIGINS)C.setOrigin(r,o);ok(r.origin==='OTHER','les 6 origines sont réglables');
 ok(!C.setStatus(r,'INTERDIT')&&!C.setOrigin(r,'X'),'valeurs invalides refusées');
 C.setStatus(r,'LIMIT');ok(C.setFrequency(r,{period:'week',maxOccurrences:2,mode:'max'})&&r.frequency.maxOccurrences===2,'fréquence max 2/semaine');
@@ -108,4 +108,41 @@ ok(REC.some(x=>/tomate/.test(x[4])&&!C.recipeFoods(x).foods.includes('tomates'))
  ok(C.ruleOf(h,'vin rouge').refs.every(x=>x.templateId!=='reflux'),'la recommandation reflux est retirée des aliments gardés');
  let h2=C.emptyHealth();C.addCondition(h2,C.CONDITIONS.find(c=>c.id==='coeliaque'));C.loadTemplate(h2,'coeliaque',ING);
  ok(C.ruleOf(h2,'pâtes').status==='UNKNOWN'&&C.suggestionOf(C.ruleOf(h2,'pâtes')).suggested==='STRICT_EXCLUSION'&&!C.suggestionOf(C.ruleOf(h2,'avoine')),'cœliaque : pâtes conseillées « à exclure » (non appliqué), avoine laissée à décider');
+ })();
+// 11. Endométriose : aliments À FAVORISER (rien n'est retiré)
+(()=>{const t=C.TEMPLATES.endometriose,D=require('../js/health-templates.js');
+ ok(t&&t.evidence==='limité'&&/données sont insuffisantes/.test(t.note)&&/anti-inflammatoire/.test(t.note),'endométriose : profil « anti-inflammatoire », niveau de preuve limité affiché, avis HAS rappelé');
+ ok(t.items.filter(i=>i.suggested==='FAVOR').length>=40&&!t.items.some(i=>i.suggested==='STRICT_EXCLUSION'),'44 aliments anti-inflammatoires à favoriser, aucune exclusion stricte');
+ ok(t.items.filter(i=>i.suggested==='AVOID').length>=20&&t.items.filter(i=>i.suggested==='AVOID').every(i=>Number.isInteger(i.freq)&&i.freq>=1),'pro-inflammatoires « à éviter » avec une fréquence (1 ou 2 fois par semaine) : jamais supprimés');
+ ok(!t.items.some(i=>['brocoli','chou vert'].includes(i.id)),'crucifères non mis en avant (étude NHS II)');
+ ok(D.templates.endometriose.sources.every(k=>D.sources[k]),'sources : HAS, ARS/EndoFrance, revues 2022-2025, étude 2026');
+ let h=C.emptyHealth();C.addCondition(h,C.CONDITIONS.find(c=>c.id==='endometriose'));const res=C.loadTemplate(h,'endometriose',ING);
+ ok(res.added.length===t.items.length&&h.foodRules.every(r=>r.status==='UNKNOWN'),'ajoutés en « À vérifier pour moi »');
+ const sal=C.ruleOf(h,'saumon');ok(C.suggestionOf(sal).suggested==='FAVOR'&&C.applySuggestion(sal)&&sal.status==='FAVOR','saumon : « Suivre la recommandation » → J’en veux plus souvent');
+ const RS=(n)=>['','x',0,'',n+';100;g'];const fish=RS('saumon'),plain=RS('riz');
+ ok(C.decide(fish,h).action==='ok'&&C.decide(fish,h).favor===1,'un aliment favorisé ne retire ni ne pénalise rien');
+ // pile : sur 2000 tirages, le plat au saumon passe devant bien plus souvent
+ let first=0;for(let i=0;i<2000;i++){const p=C.applyPool([plain,fish],h,{});if(p[0]===fish)first++}
+ ok(first>1500&&first<1950,'pile : le plat avec saumon passe devant '+Math.round(first/20)+' % du temps (sans favori : 50 %), la variété reste');
+ const pool=Array.from({length:50},(_,i)=>i%5?RS('riz'):RS('saumon'));ok(C.applyPool(pool,h,{}).length===50,'aucun plat retiré');
+ // conflit : reflux dit « à limiter » les tomates, endométriose « à favoriser » → la suggestion la plus prudente est montrée
+ C.addCondition(h,C.CONDITIONS.find(c=>c.id==='reflux'));C.loadTemplate(h,'reflux',ING);
+ ok(C.suggestionOf(C.ruleOf(h,'tomates')).suggested==='LIMIT','tomates : reflux (à limiter) passe avant endométriose (à favoriser)');
+ // pro-inflammatoires : à éviter mais jamais supprimés
+ const bh=C.ruleOf(h,'bœuf haché');ok(C.applySuggestion(bh)&&bh.status==='AVOID'&&bh.frequency.maxOccurrences===2,'bœuf haché : « à éviter », 2 fois par semaine maximum');
+ const beef=RS('bœuf haché');ok(C.decide(beef,h,{selected:[],recipes:[beef]}).action==='downrank','proposé moins souvent');
+ ok(C.decide(beef,h,{selected:[{id:0},{id:0}],recipes:[beef]}).action==='exclude','… et plus du tout cette semaine après 2 fois');
+ const g=C.gentleCount(h,'endometriose');const ap=C.applyGentle(h,'endometriose');ok(ap.fav===g.fav&&ap.less===g.less&&h.foodRules.filter(r=>r.templateId==='endometriose'&&r.status==='STRICT_EXCLUSION').length===0,'« Appliquer d’un coup » : '+ap.fav+' à favoriser, '+ap.less+' à éviter/limiter, 0 exclusion');
+ // cuisine anti-inflammatoire
+ const REC=JSON.parse(require('fs').readFileSync(require('path').join(base,'data/recettes.json'),'utf8'));
+ ok(C.cookAdapt(REC[0],h,ING)===REC[0],'adaptation des recettes désactivée par défaut dans le noyau');
+ h.cookAdapt=true;const ad=REC.map(r=>C.cookAdapt(r,h,ING));const nAd=ad.filter((x,i)=>x!==REC[i]).length;
+ ok(nAd>20,nAd+' plats salés adaptés (huile d’olive à la place du beurre…)');
+ ok(REC.every((r,i)=>!/^(dessert|sauce|boisson|base)/.test(String(r[3]))||ad[i]===r),'desserts, sauces, bases et boissons inchangés');
+ const bl=ad[REC.findIndex(r=>r[1]==='Blanquette de veau'&&/beurre/.test(r[4]))];ok(bl&&/huile d’olive/.test(bl[4])&&!/beurre;/.test(bl[4])&&/crème légère/.test(bl[4]),'blanquette : beurre → huile d’olive, crème → crème légère, mêmes quantités');
+ const q=ad.find(r=>r[1]==='Quiche lorraine');ok(!q||!q[11].inflam||!q[11].inflam.changes.some(c=>c[0]==='beurre'),'quiche : le beurre de la pâte n’est pas remplacé');
+ ok(ad.every((r,i)=>r===REC[i]||C.recipeFoods(r).foods.every(k=>k in ING)),'aliments adaptés = identifiants de la base');
+ h.conditions.find(c=>c.conditionId==='endometriose').enabled=false;{const o=REC.find(r=>r[1]==='Blanquette de veau'&&/beurre/.test(r[4]));ok(C.cookAdapt(o,h,ING)===o,'endométriose en pause : recettes d’origine');}
+ h.conditions.find(c=>c.conditionId==='endometriose').enabled=true;
+ h.enabled=false;ok(C.applyPool([plain,fish],h,{})[0]===plain,'fiche désactivée : ordre inchangé');
  console.log(`\n${n-f}/${n} vérifications réussies`);process.exitCode=f?1:0})();

@@ -84,3 +84,14 @@ Date : 24/11/2026. Version précédente : 5.60.0, qui reste en ligne à la racin
 - « Mettre en pause » une situation (ex. Crohn hors poussée) suspend les aliments venus de son profil, sauf ceux dont l'utilisateur a fait sa propre règle.
 - Retirer une situation enlève seulement les aliments proposés jamais triés ; les choix de l'utilisateur restent.
 - Tests : t8 (66), t9 (38) + t10 (10), t12 (19), t11 Chrome (8). Anciens tests 80/80.
+
+## 6.3.0 (27/11/2026) — endométriose : alimentation anti-inflammatoire + recettes adaptées
+- Nouveau statut **FAVOR — « J’en veux plus souvent »** : rien n'est retiré ; les plats riches en aliments favorisés remontent dans la pile du swipe (tirage pondéré selon la part d'aliments favorisés). Badge 🌿 sur la carte du plat. Tri des aliments : **swipe vers le bas = J'en veux plus** (+ bouton, + flèche bas).
+- **Endométriose** (niveau de preuve **limité** affiché) :
+  - 44 aliments anti-inflammatoires **à favoriser** (poissons, huile d'olive, noix, légumes, fruits, légumineuses, céréales complètes, herbes et épices). Crucifères non mis en avant (étude NHS II).
+  - 26 aliments pro-inflammatoires **à éviter, sans suppression** : viande rouge (2×/sem. max), charcuterie (1×/sem.), beurre et crèmes (2×/sem.), huile de tournesol (1×/sem.), sucres (2×/sem.), alcool (1×/sem.). Aucune exclusion stricte.
+  - Sources : HAS 2017, ARS Hauts-de-France/EndoFrance, méta-analyse 2022 (viande rouge, graisses saturées et trans), revues Nutrients 2022, IJFS 2025, Frontiers 2026, Current Obesity Reports 2025, étude JOGOH 2026, Inserm (Quotidien du Médecin).
+- **Cuisine anti-inflammatoire** (réglage « Adapter mes recettes », activé en chargeant le profil endométriose, modifiable) : dans les plats salés, beurre et huile de tournesol → huile d'olive, crème fraîche/liquide → crème légère, mêmes quantités ; ingrédients, étapes, courses suivent. Desserts, sauces, bases, et beurre de pâte (quiche, tarte…) inchangés. Note 🌿 sur la fiche recette. Endométriose en pause → recettes d'origine.
+- « Appliquer d'un coup » : seulement les recommandations qui ne suppriment rien (à favoriser, à éviter/limiter avec fréquence).
+- Les fréquences recommandées (« 2 fois par semaine maximum ») sont appliquées avec la recommandation.
+- Tests : t8 89, t9 38 + t10 10, t12 33, t11 Chrome 8. Anciens tests 80/80.

@@ -30,7 +30,7 @@ async def main():
     await pg.click('[data-hfood="tomates"]');await pg.wait_for_timeout(200);await pg.click('[data-hset="tomates|status|LIMIT"]');await pg.wait_for_timeout(200)
     await pg.screenshot(path=OUT+'05_detail_frequence.png',full_page=True)
     await pg.click('[data-hset="tomates|freq|max1"]');await pg.click('[data-hclose]')
-    for f in ['oignon','ail','poivrons']:
+    for f in ['oignon','ail','poivrons','saumon']:
       await pg.fill('[data-hfoodq]',f[:5]);await pg.wait_for_timeout(150);await pg.click(f'[data-hfood="{f}"]');await pg.wait_for_timeout(150);await pg.click('[data-hclose]')
     await pg.screenshot(path=OUT+'06_sante_liste.png',full_page=True)
     await pg.click('[data-go="healthSwipe"]');await pg.wait_for_timeout(300);await pg.screenshot(path=OUT+'07_swipe_aliment.png')
@@ -39,9 +39,9 @@ async def main():
       await pg.mouse.move(x,y);await pg.mouse.down()
       for i in range(1,11):await pg.mouse.move(x+dx*i/10,y+dy*i/10)
       await pg.mouse.up();await pg.wait_for_timeout(250)
-    await drag(160,0);await drag(-160,0);await drag(0,-180)
+    await drag(160,0);await drag(-160,0);await drag(0,-180);await pg.screenshot(path=OUT+'07b_swipe_4_gestes.png');await drag(0,180)
     st=await pg.evaluate("state.profile.health.foodRules.map(r=>r.foodOrFamilyId+':'+r.status).join(',')")
-    ok(st=='tomates:LIMIT,oignon:TOLERATED,ail:AVOID,poivrons:STRICT_EXCLUSION','gestes réels : droite=tolère, gauche=éviter, haut=exclure ('+st+')')
+    ok(st=='tomates:LIMIT,oignon:TOLERATED,ail:AVOID,poivrons:STRICT_EXCLUSION,saumon:FAVOR','gestes réels : droite=tolère, gauche=éviter, haut=exclure, bas=j’en veux plus ('+st+')')
     await pg.screenshot(path=OUT+'08_fin_tri.png')
     await pg.click('[data-go="health"]');await pg.wait_for_timeout(200);await pg.click('[data-hedit="ail"]');await pg.wait_for_timeout(200)
     ok(await pg.locator('[data-hsheet]').count()==1,'toucher un aliment ouvre son détail');await pg.click('[data-hclose]')

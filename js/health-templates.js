@@ -1,11 +1,12 @@
-/* SwipeRepas 6.2.0 — Profils de départ « Santé & tolérances ».
+/* SwipeRepas 6.3.0 — Profils de départ « Santé & tolérances ».
    Recherche documentaire du 26/11/2026, sources officielles françaises (Assurance Maladie / ameli.fr, Santé.fr,
    SNFGE, sociétés savantes, associations de patients). Chaque aliment est relié à la phrase de la source qui le justifie.
 
    Règles :
    - Ce sont des RECOMMANDATIONS GÉNÉRALES, pas une prescription. Chaque aliment arrive en « À vérifier pour moi » :
      la personne décide elle-même (et avec son médecin ou diététicien).
-   - « suggested » = ce que dit la recommandation générale (LIMIT, AVOID, STRICT_EXCLUSION). Jamais appliqué automatiquement.
+   - « suggested » = ce que dit la recommandation générale (FAVOR = à favoriser, LIMIT, AVOID, STRICT_EXCLUSION). Jamais appliqué automatiquement.
+   - « evidence » = niveau de preuve affiché quand il est limité (ex. endométriose).
    - Seuls des identifiants existants de data/ingredients.json sont utilisés (test automatique t8).
    - Relecture par un professionnel de santé recommandée avant un usage commercial.
 */
@@ -34,10 +35,19 @@ const S={
  ameli_ulcere:{title:'Assurance Maladie (ameli.fr) — L’ulcère de l’estomac ou du duodénum au quotidien',url:'https://www.ameli.fr/assure/sante/themes/ulcere-estomac-duodenum/vivre-quotidien-ulcere-estomac-duodenum'},
  ameli_dyspepsie:{title:'Assurance Maladie (ameli.fr) — Dyspepsie ou mauvaise digestion : que faire ?',url:'https://www.ameli.fr/rhone/assure/sante/themes/dyspepsie-mauvaise-digestion/consulter-agir-dyspepsie-mauvaise-digestion'},
  ameli_irc:{title:'Assurance Maladie (ameli.fr) — Maladie rénale chronique : prise en charge',url:'https://www.ameli.fr/medecin/sante-prevention/sante-cardiovasculaire/maladies-cardiovasculaires-et-associees/maladie-renale-chronique'},
- has_endo:{title:'HAS / CNGOF — Prise en charge de l’endométriose (2017)',url:'https://www.has-sante.fr/jcms/c_2819733/fr/prise-en-charge-de-l-endometriose'}
+ has_endo:{title:'HAS / CNGOF — Prise en charge de l’endométriose (2017)',url:'https://www.has-sante.fr/jcms/c_2819733/fr/prise-en-charge-de-l-endometriose'},
+ ars_endo:{title:'ARS Hauts-de-France et EndoFrance — Fiche endométriose (traitements, alimentation)',url:'https://www.hauts-de-france.ars.sante.fr/media/67673/download'},
+ nutrients22:{title:'Nutrients (2022) — « I Am the 1 in 10 — What Should I Eat? » Revue sur la nutrition et l’endométriose',url:'https://pmc.ncbi.nlm.nih.gov/articles/PMC9783589/'},
+ review25:{title:'Revue (2025) — Stratégies nutritionnelles dans le traitement de l’endométriose',url:'https://pmc.ncbi.nlm.nih.gov/articles/PMC12788026/'},
+ barrea25:{title:'Current Obesity Reports (2025) — Thérapie nutritionnelle et endométriose : du régime méditerranéen à la supplémentation',url:'https://link.springer.com/article/10.1007/s13679-025-00662-8'},
+ meta22:{title:'Méta-analyse 2022 (36138433) — Groupes d’aliments et risque d’endométriose : viande rouge, graisses saturées et trans',url:'https://pubmed.ncbi.nlm.nih.gov/36138433/'},
+ frontiers26:{title:'Frontiers in Nutrition (2026) — Revue : alimentation et inflammation dans l’endométriose',url:'https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2026.1776512/full'},
+ ijfs25:{title:'Int J Fertil Steril (2025) — Rôle de la nutrition dans la prévention et la prise en charge de l’endométriose',url:'https://pmc.ncbi.nlm.nih.gov/articles/PMC12530228'},
+ qdm_endo:{title:'Le Quotidien du Médecin — Un régime alimentaire contre l’endométriose ? (Inserm)',url:'https://cardiologie.lequotidiendumedecin.fr/specialites/nutrition/un-regime-alimentaire-contre-lendometriose'},
+ jogoh26:{title:'J Gynecol Obstet Hum Reprod (2026) — Régime méditerranéen et symptômes de l’endométriose',url:'https://www.em-consulte.com/article/1839637'}
 };
-const L='LIMIT',A='AVOID',X='STRICT_EXCLUSION';
-const many=(ids,sug,why)=>ids.map(id=>[id,sug,why]);
+const L='LIMIT',A='AVOID',X='STRICT_EXCLUSION',F='FAVOR';
+const many=(ids,sug,why,freq)=>ids.map(id=>freq!=null?[id,sug,why,freq]:[id,sug,why]);
 const T={};
 /* ---- Reflux gastro-œsophagien ---- */
 T.reflux={label:'Reflux gastro-œsophagien',sources:['ameli_rgo','ameli_rgo2','sfhgl_rgo'],
@@ -125,15 +135,31 @@ T.dyspepsie={label:'Dyspepsie (mauvaise digestion)',sources:['ameli_dyspepsie'],
  foods:[...many(['lardons','chorizo','merguez','chipolatas de porc','crème fraîche'],L,'Aliments gras (graisses cuites, fritures, charcuterie) : ralentissent la vidange de l’estomac (ameli).'),
   ...many(['piment','curry','citron','jus d’orange','vinaigre de vin'],L,'Aliments acides et épicés : augmentent la sensibilité de l’estomac (ameli).'),
   ...many(['lentilles cuites','lentilles vertes','pois chiches','haricots rouges'],L,'Aliments riches en fibres : favorisent la distension de l’estomac (ameli).')]};
+/* ---- Endométriose : alimentation de type méditerranéen (« anti-inflammatoire ») — surtout des aliments À FAVORISER ---- */
+T.endometriose={label:'Endométriose',evidence:'limité',cook:true,sources:['has_endo','ars_endo','meta22','frontiers26','ijfs25','nutrients22','barrea25','jogoh26','review25','qdm_endo'],
+ note:'La HAS (2017) estime que les données sont insuffisantes pour recommander un régime en cas d’endométriose, et aucune alimentation ne soigne la maladie. Mais comme c’est une maladie inflammatoire, les équipes conseillent souvent une alimentation de type méditerranéen, dite « anti-inflammatoire ». Daily met en avant les aliments anti-inflammatoires (légumes, fruits, poissons, huile d’olive, noix, légumineuses, herbes et épices) et passe les aliments pro-inflammatoires en « à éviter » (viande rouge, charcuterie, graisses saturées, sucres raffinés, alcool, huile de tournesol) : ils ne sont pas supprimés, ils reviennent rarement (1 à 2 fois par semaine au maximum). Les recettes peuvent aussi être adaptées (huile d’olive à la place du beurre…). Les crucifères (brocoli, chou) ne sont pas mis en avant : une grande étude les associe à plus de diagnostics. Évitez les exclusions strictes (gluten, laitages…) sans avis médical : elles exposent à des carences. En cas de troubles digestifs, parlez du régime pauvre en FODMAP à un diététicien.',
+ foods:[...many(['saumon','pavés de saumon','truite','anchois','thon'],F,'Poissons, riches en oméga-3 : recommandés dans l’endométriose (revues 2022-2026 ; preuves encore limitées).'),
+  ['huile d’olive',F,'Huile d’olive : base de l’alimentation méditerranéenne, associée à moins de douleurs pelviennes (études 2025-2026).'],
+  ...many(['noix','amandes','pignons de pin'],F,'Noix et graines (vitamine E, oméga-3) : recommandées (revue Nutrients 2022).'),
+  ...many(['épinards','courgettes','carottes','poivrons','aubergine','haricots verts','tomates','betterave rouge','potiron','endive'],F,'Légumes (polyphénols, vitamines C et E, fibres) : recommandés (revue Nutrients 2022, alimentation méditerranéenne).'),
+  ...many(['fruits rouges','fraises','cerises','oranges','clémentine','pommes','poires'],F,'Fruits (antioxydants) : recommandés (revue Nutrients 2022, alimentation méditerranéenne).'),
+  ...many(['lentilles corail','lentilles vertes','lentilles cuites','pois chiches','haricots rouges'],F,'Légumineuses : riches en fibres, au cœur de l’alimentation méditerranéenne (revue 2025).'),
+  ...many(['flocons d’avoine','avoine','quinoa'],F,'Céréales complètes : fibres de l’alimentation méditerranéenne (revue 2025).'),
+  ...many(['gingembre','gingembre moulu','curry','cannelle','persil','basilic','thym','origan','coriandre fraîche','herbes de Provence'],F,'Herbes et épices (composés anti-inflammatoires) : recommandées (revue Nutrients 2022 ; preuves surtout en laboratoire).'),
+  ...many(['bœuf haché','bœuf à braiser','bœuf émincé','émincé de bœuf','steak de bœuf','steak de veau','blanquette de veau','côte de porc','morceaux de porc','porc haché'],A,'Viande rouge : pro-inflammatoire, associée à un risque plus élevé d’endométriose (méta-analyse 2022 ; revues 2025-2026). À éviter, mais pas interdit : 2 fois par semaine au maximum.',2),
+  ...many(['lardons','chorizo','merguez','chipolatas de porc','saucisses de bœuf','jambon blanc'],A,'Viandes transformées (charcuterie) : pro-inflammatoires (revues 2022 et 2025). À éviter, mais pas interdit : 1 fois par semaine au maximum.',1),
+  ...many(['beurre','crème fraîche','crème liquide'],A,'Graisses saturées : associées à un risque plus élevé (méta-analyse 2022). À éviter, mais pas interdit : 2 fois par semaine au maximum ; l’huile d’olive peut les remplacer.',2),
+  ['huile de tournesol',A,'Huile riche en oméga-6, associés à plus d’inflammation (revue Frontiers 2026). À éviter, mais pas interdite ; l’huile d’olive peut la remplacer.',1],
+  ...many(['sucre','sucre roux','sucre vanillé'],A,'Sucres raffinés et aliments à index glycémique élevé : pro-inflammatoires (revues 2025-2026). À éviter, mais pas interdit : 2 fois par semaine au maximum.',2),
+  ...many(['vin rouge','vin blanc','bière brune'],A,'Alcool : associé à plus d’inflammation (revue 2025). À éviter, mais pas interdit : 1 fois par semaine au maximum.',1)]};
 /* ---- Situations sans liste d'aliments (information seulement) ---- */
 const INFO={
- endometriose:{text:'La HAS (2017) indique que les données sont insuffisantes pour recommander un régime alimentaire en cas d’endométriose. Aucun aliment n’est donc proposé : ajoutez seulement ceux que vous tolérez mal, ou les consignes de votre médecin.',sources:['has_endo']},
  allergie_alim:{text:'Les allergies se règlent dans Profil → Mon foyer → Allergies : elles sont déjà reliées aux 14 allergènes de l’app et retirent les recettes concernées. Ici, vous pouvez ajouter un aliment précis en « Exclusion stricte » avec l’origine « Allergie ».',sources:[]},
  intol_fructose:{text:'Il existe deux situations très différentes (intolérance héréditaire, malabsorption). La liste d’aliments dépend du diagnostic : ajoutez celle donnée par votre médecin ou diététicien.',sources:[]},
  intol_autre:{text:'Ajoutez les aliments que vous tolérez mal, ou ceux indiqués par votre médecin.',sources:[]},
  irc:{text:'En cas de maladie rénale chronique, le sel est limité (6 à 8 g maximum par jour, objectif moins de 5 g) et les protéines sont adaptées selon le stade. Ces apports sont individuels : suivez les consignes de votre néphrologue ou diététicien.',sources:['ameli_irc']}
 };
-const DATA={version:'SANTE_TEMPLATES_1.0',checked:'2026-11-26',verification:'Recherche documentaire sur sources officielles (26/11/2026). Relecture par un professionnel de santé recommandée.',sources:S,templates:T,info:INFO};
+const DATA={version:'SANTE_TEMPLATES_1.2',checked:'2026-11-26',verification:'Recherche documentaire sur sources officielles et études scientifiques (26-27/11/2026). Relecture par un professionnel de santé recommandée.',sources:S,templates:T,info:INFO};
 if(typeof module!=='undefined'&&module.exports)module.exports=DATA;
 root.SRHealthData=DATA;
 })(typeof window!=='undefined'?window:globalThis);
